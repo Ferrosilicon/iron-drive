@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Iron Drive</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="playlists">
+        <item>Playlist</item>
+        <item>Pump-Up</item>
+        <item>Long Drive</item>
+        <item>Work Out</item>
+    </string-array>
+
+    <string-array name="destinations">
+        <item>Destination</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>School</item>
+    </string-array>
+</resources>
+
+
