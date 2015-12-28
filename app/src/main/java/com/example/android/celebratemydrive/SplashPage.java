@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by Shubhang on 10/22/2015.
- */
-public class SplashPage extends ActionBarActivity {
+public class SplashPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.splash_screen);
 
@@ -19,9 +16,7 @@ public class SplashPage extends ActionBarActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         }, 2000);
     }

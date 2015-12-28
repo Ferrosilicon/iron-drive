@@ -2,9 +2,11 @@ package com.example.android.celebratemydrive;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.Menu;
@@ -17,7 +19,7 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     EditText timerET;
     ImageView button;
     boolean red = true;
@@ -25,7 +27,6 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -49,13 +50,8 @@ public class MainActivity extends ActionBarActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (red) {
-                    button.setImageResource(R.drawable.green_car);
-                    red = false;
-                } else {
-                    button.setImageResource(R.drawable.red_car);
-                    red = true;
-                }
+                button.setImageResource(red ? R.drawable.green_car : R.drawable.red_car);
+                red = !red;
             }
         });
     }
