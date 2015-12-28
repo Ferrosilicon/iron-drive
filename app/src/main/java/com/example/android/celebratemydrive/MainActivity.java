@@ -2,6 +2,8 @@ package com.example.android.celebratemydrive;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.os.AsyncTask;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +23,15 @@ import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String[] VOICE_COMMANDS = new String[] { "Keep two eyes on the road",
+            "Keep two hands on the wheel"};
+
     EditText timerET;
     ImageView button;
     boolean red = true;
+    Thread thread;
+    TextToSpeech tps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +54,32 @@ public class MainActivity extends AppCompatActivity {
                 newFragment.show(getSupportFragmentManager(), "timePicker");
             }
         });
+        tps = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
 
+            }
+        });
         button = (ImageView) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 button.setImageResource(red ? R.drawable.green_car : R.drawable.red_car);
-                red = !red;
+                final View voiceSwitch = findViewById(R.id.voice_switch);
+                if (!(red = !red) && voiceSwitch != null && voiceSwitch.isEnabled())
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                while (!red) {
+                                    tps.speak("Keep your eyes on the road", TextToSpeech.QUEUE_FLUSH, null, "a");
+                                    Thread.sleep(5000);
+                                }
+                            } catch (final InterruptedException e) {
+                                Log.e("Void thread exception", e.getMessage());
+                            }
+                        }
+                    }).start();
             }
         });
     }
