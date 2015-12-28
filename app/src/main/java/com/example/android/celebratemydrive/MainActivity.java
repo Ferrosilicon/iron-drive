@@ -20,13 +20,15 @@ import android.widget.ImageView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String[] VOICE_COMMANDS = new String[] { "Keep two eyes on the road",
-            "Keep two hands on the wheel"};
+            "Keep two hands on the wheel", "Obey the speed limit", "Make sure you're wearing your seat belt" };
 
+    Random random = new Random();
     EditText timerET;
     ImageView button;
     boolean red = true;
@@ -72,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 while (!red) {
-                                    tps.speak("Keep your eyes on the road", TextToSpeech.QUEUE_FLUSH, null, "a");
-                                    Thread.sleep(5000);
+                                    tps.speak(VOICE_COMMANDS[random.nextInt(VOICE_COMMANDS.length)], TextToSpeech.QUEUE_FLUSH, null, "a");
+                                    Thread.sleep(300000);
                                 }
                             } catch (final InterruptedException e) {
                                 Log.e("Void thread exception", e.getMessage());
