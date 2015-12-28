@@ -84,25 +84,16 @@ public class MainActivity extends AppCompatActivity {
                             PendingIntent.FLAG_ONE_SHOT);
                     long firstTime = c.getTimeInMillis();
                     AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                    SharedPreferences sharedPreferences = PreferenceManager
+                            .getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("voice", voiceSwitch.isEnabled());
+                    editor.commit();
+                    Boolean bool = sharedPreferences.getBoolean("voice", true);
+                    String s = bool.toString();
+                    Log.e("", s);
                     am.set(AlarmManager.RTC_WAKEUP, firstTime, mAlarmSender);
                 }
-//                if (!(red = !red) && voiceSwitch != null && voiceSwitch.isEnabled())
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//                                while (!red) {
-//                                    tps.speak(VOICE_COMMANDS[random.nextInt(VOICE_COMMANDS.length)], TextToSpeech.QUEUE_FLUSH, null, "a");
-//                                    Thread.sleep(300000);
-//                                }
-//                            } catch (final InterruptedException e) {
-//                                Log.e("Void thread exception", e.getMessage());
-//                            }
-//                        }
-//                    }).start();
-//                if (!red) {
-//                    new LockingTask().execute();
-//                }
             }
         });
         final Switch notificationSwitch = (Switch) findViewById(R.id.voice_switch);
@@ -116,18 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("voice", isChecked);
                 editor.commit();
-
-                if (isChecked) {
-                    Calendar c = Calendar.getInstance();
-                    PendingIntent mAlarmSender = PendingIntent.getBroadcast(getApplicationContext(), 0,
-                            new Intent(getApplicationContext(), AlarmReceiver.class),
-                            PendingIntent.FLAG_ONE_SHOT);
-                    long firstTime = c.getTimeInMillis();
-                    AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                    if (!sharedPreferences.getBoolean("running", false)) {
-                        am.set(AlarmManager.RTC_WAKEUP, firstTime, mAlarmSender);
-                    }
-                }
             }
         });
     }
