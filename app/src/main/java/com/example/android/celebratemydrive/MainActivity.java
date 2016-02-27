@@ -7,6 +7,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,9 +32,25 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * The minimum amount of time between location updates in milliseconds.
+     */
+    private static final long MINIMUM_LOCATION_UPDATE_TIME = 2500;
+
+    /**
+     * The minimum amount of distance between location updates in meters.
+     */
+    private static final float MINIMUM_LOCATION_UPDATE_DISTANCE = 10;
+
+    /**
+     * The target location threshold in meters.
+     */
+    private static final float TARGET_LOCATION_THRESHOLD = 50;
     EditText timerET;
     ImageView button;
     boolean red = true;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setTitle("Iron Drive");
             setSupportActionBar(toolbar);
         }
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         timerET = (EditText) findViewById(R.id.timer);
         timerET.setClickable(true);
@@ -81,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
                     Boolean bool = sharedPreferences.getBoolean("voice", true);
                     String s = bool.toString();
                     Log.e("", s);
+                    // TODO: Set locationTracking variable
+                    if (sharedPreferences.getBoolean("locationTracking", false)) {
+                        onTrackingStart(null); // TODO: null = targetLocation
+                    }
                     am.set(AlarmManager.RTC_WAKEUP, firstTime, mAlarmSender);
                 } else {
 
@@ -102,6 +127,31 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Called when the start button is pressed and GPS tracking is enabled (not timer).
+     */
+    void onTrackingStart(final Location targetLocation) {
+        try {
+            locationListener = new ArriveLocationListener(this, targetLocation, TARGET_LOCATION_THRESHOLD);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    MINIMUM_LOCATION_UPDATE_TIME, MINIMUM_LOCATION_UPDATE_DISTANCE, locationListener);
+        } catch (final SecurityException e) {
+            Log.e("MainActivity", "Permission fuck-up while activating");
+        }
+    }
+
+    /**
+     * Called when the app is stopped when tracking is enabled or the user has arrived at their
+     * location.
+     */
+    void onTrackingStop() {
+        try {
+            locationManager.removeUpdates(locationListener);
+            locationListener = null;
+        } catch (final SecurityException e) {
+            Log.e("MainActivity", "Permission fuck-up while deactivating");
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
