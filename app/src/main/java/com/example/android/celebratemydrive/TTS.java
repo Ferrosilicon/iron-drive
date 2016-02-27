@@ -10,11 +10,12 @@ import java.util.Locale;
 import java.util.Random;
 
 // TODO: deprecated
-public  class TTS extends Service implements TextToSpeech.OnInitListener, TextToSpeech.OnUtteranceCompletedListener {
-    private TextToSpeech mTts;
+public class TTS extends Service implements TextToSpeech.OnInitListener, TextToSpeech.OnUtteranceCompletedListener {
+
     private static final String[] VOICE_COMMANDS = new String[]{"Keep two eyes on the road",
             "Keep two hands on the wheel", "Obey the speed limit", "Make sure you're wearing your seat belt"};
     private final Random random = new Random();
+    private TextToSpeech mTts;
 
     @Override
     public void onCreate() {
@@ -22,7 +23,6 @@ public  class TTS extends Service implements TextToSpeech.OnInitListener, TextTo
         mTts = new TextToSpeech(this, this);
         // This is a good place to set spokenText
     }
-
 
 
     @Override
