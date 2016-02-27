@@ -11,7 +11,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("Tag", "in broadcastreceiver");
+        Log.i("AlarmReceiver", "Received");
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);

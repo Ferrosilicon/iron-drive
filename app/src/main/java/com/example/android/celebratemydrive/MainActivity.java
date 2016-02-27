@@ -66,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 button.setImageResource(red ? R.drawable.green_car : R.drawable.red_car);
                 final View voiceSwitch = findViewById(R.id.voice_switch);
-                red = !red;
-                if (!red) {
+                if (!(red = !red)) {
                     Calendar c = Calendar.getInstance();
                     PendingIntent mAlarmSender = PendingIntent.getBroadcast(getApplicationContext(), 0,
                             new Intent(getApplicationContext(), AlarmReceiver.class),
@@ -83,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
                     String s = bool.toString();
                     Log.e("", s);
                     am.set(AlarmManager.RTC_WAKEUP, firstTime, mAlarmSender);
+                } else {
+
                 }
             }
         });
