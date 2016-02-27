@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     boolean red = true;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private Spinner locationSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+        locationSpinner = (Spinner) findViewById(R.id.locationSpinner);
+
         button = (ImageView) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,13 +106,14 @@ public class MainActivity extends AppCompatActivity {
                     Boolean bool = sharedPreferences.getBoolean("voice", true);
                     String s = bool.toString();
                     Log.e("", s);
-                    // TODO: Set locationTracking variable
-                    if (sharedPreferences.getBoolean("locationTracking", false)) {
-                        onTrackingStart(null); // TODO: null = targetLocation
+
+                    if (locationSpinner.getSelectedItem() != null) {
+                        onTrackingStart(null); // TODO: get Location instance of spinner value
                     }
                     am.set(AlarmManager.RTC_WAKEUP, firstTime, mAlarmSender);
                 } else {
-
+                    if (locationSpinner.getSelectedItem() != null)
+                        onTrackingStop();
                 }
             }
         });

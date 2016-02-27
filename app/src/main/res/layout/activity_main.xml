@@ -25,11 +25,11 @@
                 android:theme="@style/Toolbar"/>
 
             <ImageView
+                android:id="@+id/button"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_marginLeft="55dp"
                 android:layout_marginTop="110dp"
-                android:id="@+id/button"
                 android:src="@drawable/red_car"/>
 
         </LinearLayout>
@@ -42,24 +42,25 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="Driving Options"
-                android:padding="21dp"
-                android:textSize="20sp"
-                android:textColor="#FFFFFF"
                 android:layout_marginBottom="16dp"
-                android:background="@color/primary"/>
+                android:background="@color/primary"
+                android:gravity="start"
+                android:padding="21dp"
+                android:text="Driving Options"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="38dp"
                     android:layout_marginRight="8dp"
                     android:src="@drawable/ic_location" />
                 <Spinner
+                    android:id="@+id/locationSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:entries="@array/destinations"/>
@@ -67,41 +68,41 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="38dp"
                     android:layout_marginRight="8dp"
                     android:src="@drawable/ic_timer" />
                 <EditText
+                    android:id="@+id/timer"
                     android:layout_width="match_parent"
                     android:layout_height="38dp"
-                    android:textSize="16sp"
-                    android:id="@+id/timer"
-                    android:hint="Alarm"/>
+                    android:hint="Alarm"
+                    android:textSize="16sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="38dp"
                     android:layout_marginRight="6dp"
                     android:src="@drawable/ic_playlist" />
                 <Spinner
+                    android:id="@+id/spinner"
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
-                    android:id="@+id/spinner"
                     android:entries="@array/playlists"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:orientation="horizontal">
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -110,15 +111,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
-                        android:textSize="16sp"
+                        android:text="Voice Commands"
                         android:textColor="#000000"
-                        android:text="Voice Commands"/>
+                        android:textSize="16sp" />
                     <Switch
                         android:id="@+id/voice_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:layout_marginLeft="8dp"/>
+                        android:layout_marginLeft="8dp"
+                        android:gravity="end" />
             </LinearLayout>
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
