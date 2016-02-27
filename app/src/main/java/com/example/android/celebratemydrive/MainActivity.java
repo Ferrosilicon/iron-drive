@@ -9,10 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,20 +26,12 @@ import android.widget.Switch;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-import java.util.Random;
-
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String[] VOICE_COMMANDS = new String[] { "Keep two eyes on the road",
-            "Keep two hands on the wheel", "Obey the speed limit", "Make sure you're wearing your seat belt" };
-
-    Random random = new Random();
     EditText timerET;
     ImageView button;
     boolean red = true;
-    Thread thread;
-    TextToSpeech tps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                             .getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("voice", voiceSwitch.isEnabled());
-                    editor.commit();
+                    editor.apply();
                     Boolean bool = sharedPreferences.getBoolean("voice", true);
                     String s = bool.toString();
                     Log.e("", s);
@@ -106,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         .getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("voice", isChecked);
-                editor.commit();
+                editor.apply();
             }
         });
     }
@@ -138,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             implements TimePickerDialog.OnTimeSetListener {
 
         @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();

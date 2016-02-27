@@ -9,15 +9,12 @@ import android.util.Log;
 import java.util.Locale;
 import java.util.Random;
 
-/**
- * Created by Shubhang on 12/27/2015.
- */
+// TODO: deprecated
 public  class TTS extends Service implements TextToSpeech.OnInitListener, TextToSpeech.OnUtteranceCompletedListener {
     private TextToSpeech mTts;
-    private String spokenText = "test";
     private static final String[] VOICE_COMMANDS = new String[]{"Keep two eyes on the road",
             "Keep two hands on the wheel", "Obey the speed limit", "Make sure you're wearing your seat belt"};
-    Random random = new Random();
+    private final Random random = new Random();
 
     @Override
     public void onCreate() {
