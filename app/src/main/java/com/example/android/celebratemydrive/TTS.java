@@ -24,7 +24,6 @@ public class TTS extends Service implements TextToSpeech.OnInitListener, TextToS
         // This is a good place to set spokenText
     }
 
-
     @Override
     public void onInit(int status) {
         Log.e("Tag", "Service started");
