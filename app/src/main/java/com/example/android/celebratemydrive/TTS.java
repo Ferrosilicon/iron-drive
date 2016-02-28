@@ -10,10 +10,12 @@ import java.util.Locale;
 import java.util.Random;
 
 // TODO: deprecated
-public class TTS extends Service implements TextToSpeech.OnInitListener, TextToSpeech.OnUtteranceCompletedListener {
+final class TTS extends Service implements TextToSpeech.OnInitListener,
+        TextToSpeech.OnUtteranceCompletedListener {
 
     private static final String[] VOICE_COMMANDS = new String[]{"Keep two eyes on the road",
-            "Keep two hands on the wheel", "Obey the speed limit", "Make sure you're wearing your seat belt"};
+            "Keep two hands on the wheel", "Obey the speed limit",
+            "Make sure you're wearing your seat belt"};
     private final Random random = new Random();
     private TextToSpeech mTts;
 
@@ -25,10 +27,10 @@ public class TTS extends Service implements TextToSpeech.OnInitListener, TextToS
     }
 
     @Override
-    public void onInit(int status) {
+    public void onInit(final int status) {
         Log.e("Tag", "Service started");
         if (status == TextToSpeech.SUCCESS) {
-            int result = mTts.setLanguage(Locale.US);
+            final int result = mTts.setLanguage(Locale.US);
             if (result != TextToSpeech.LANG_MISSING_DATA && result != TextToSpeech.LANG_NOT_SUPPORTED) {
                 mTts.speak(VOICE_COMMANDS[random.nextInt(VOICE_COMMANDS.length)], TextToSpeech.QUEUE_FLUSH, null, "a");
             }
@@ -36,7 +38,7 @@ public class TTS extends Service implements TextToSpeech.OnInitListener, TextToS
     }
 
     @Override
-    public void onUtteranceCompleted(String uttId) {
+    public void onUtteranceCompleted(final String uttId) {
         stopSelf();
     }
 
@@ -50,7 +52,7 @@ public class TTS extends Service implements TextToSpeech.OnInitListener, TextToS
     }
 
     @Override
-    public IBinder onBind(Intent arg0) {
+    public IBinder onBind(final Intent arg0) {
         return null;
     }
 }

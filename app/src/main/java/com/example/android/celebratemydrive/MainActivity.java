@@ -47,19 +47,22 @@ public class MainActivity extends AppCompatActivity {
      * The target location threshold in meters.
      */
     private static final float TARGET_LOCATION_THRESHOLD = 50;
-    EditText timerET;
-    ImageView button;
-    boolean red = true;
+
     private LocationManager locationManager;
     private LocationListener locationListener;
+
     private Spinner locationSpinner;
+    private EditText timerET;
+    private ImageView button;
+
+    private boolean red = true;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle("Iron Drive");
             setSupportActionBar(toolbar);
@@ -92,19 +95,22 @@ public class MainActivity extends AppCompatActivity {
                 button.setImageResource(red ? R.drawable.green_car : R.drawable.red_car);
                 final View voiceSwitch = findViewById(R.id.voice_switch);
                 if (!(red = !red)) {
-                    Calendar c = Calendar.getInstance();
-                    PendingIntent mAlarmSender = PendingIntent.getBroadcast(getApplicationContext(), 0,
+                    final Calendar c = Calendar.getInstance();
+                    final PendingIntent mAlarmSender =
+                            PendingIntent.getBroadcast(getApplicationContext(), 0,
                             new Intent(getApplicationContext(), AlarmReceiver.class),
                             PendingIntent.FLAG_ONE_SHOT);
                     long firstTime = c.getTimeInMillis();
-                    AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                    SharedPreferences sharedPreferences = PreferenceManager
+                    final AlarmManager am =
+                            (AlarmManager) getApplicationContext()
+                                    .getSystemService(Context.ALARM_SERVICE);
+                    final SharedPreferences sharedPreferences = PreferenceManager
                             .getDefaultSharedPreferences(getApplicationContext());
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    final SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("voice", voiceSwitch.isEnabled());
                     editor.apply();
-                    Boolean bool = sharedPreferences.getBoolean("voice", true);
-                    String s = bool.toString();
+                    final Boolean bool = sharedPreferences.getBoolean("voice", true);
+                    final String s = bool.toString();
                     Log.e("", s);
 
                     if (locationSpinner.getSelectedItem() != null) {
@@ -118,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         final Switch notificationSwitch = (Switch) findViewById(R.id.voice_switch);
-        notificationSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getBoolean("voice", true));
+        notificationSwitch.setChecked(PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext()).getBoolean("voice", true));
         notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -137,9 +143,11 @@ public class MainActivity extends AppCompatActivity {
      */
     void onTrackingStart(final Location targetLocation) {
         try {
-            locationListener = new ArriveLocationListener(this, targetLocation, TARGET_LOCATION_THRESHOLD);
+            locationListener = new ArriveLocationListener(this, targetLocation,
+                    TARGET_LOCATION_THRESHOLD);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                    MINIMUM_LOCATION_UPDATE_TIME, MINIMUM_LOCATION_UPDATE_DISTANCE, locationListener);
+                    MINIMUM_LOCATION_UPDATE_TIME, MINIMUM_LOCATION_UPDATE_DISTANCE,
+                    locationListener);
         } catch (final SecurityException e) {
             Log.e("MainActivity", "Permission fuck-up while activating");
         }
@@ -159,18 +167,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -180,23 +188,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class TimePickerFragment extends DialogFragment
+    public static final class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
         @Override
         @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
+        public Dialog onCreateDialog(final Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
+            final int hour = c.get(Calendar.HOUR_OF_DAY);
+            final int minute = c.get(Calendar.MINUTE);
 
             // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
 
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        public void onTimeSet(final TimePicker view, final int hourOfDay, final int minute) {
             String minStr = Integer.toString(minute);
             if (minute < 10) {
                 minStr = "0" + minStr;
@@ -204,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class LockingTask extends AsyncTask<Void, Void, Void> {
+    private final class LockingTask extends AsyncTask<Void, Void, Void> {
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(final Void... voids) {
             return null;
         }
     }

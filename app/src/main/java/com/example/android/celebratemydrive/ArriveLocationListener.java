@@ -17,6 +17,7 @@ class ArriveLocationListener implements LocationListener {
         this.targetLocationThreshold = targetLocationThreshold;
     }
 
+    @Override
     public void onLocationChanged(final Location location) {
         if (targetLocation.distanceTo(location) <= targetLocationThreshold) {
             // TODO: Arrived at location
@@ -24,12 +25,15 @@ class ArriveLocationListener implements LocationListener {
         }
     }
 
+    @Override
     public void onStatusChanged(final String provider, final int status, final Bundle extras) {
     }
 
+    @Override
     public void onProviderEnabled(final String provider) {
     }
 
+    @Override
     public void onProviderDisabled(final String provider) {
     }
 }
