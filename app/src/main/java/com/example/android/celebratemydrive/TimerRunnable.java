@@ -8,6 +8,11 @@ import java.util.Random;
 
 final class TimerRunnable implements Runnable, TextToSpeech.OnInitListener {
 
+    /**
+     * The delay between voice commands.
+     */
+    private static final int VOICE_COUNTDOWN_DELAY = 20;
+
     private static final String[] VOICE_COMMANDS = new String[]{"Keep two eyes on the road",
             "Keep two hands on the wheel", "Obey the speed limit",
             "Make sure you're wearing your seat belt"};
@@ -18,7 +23,7 @@ final class TimerRunnable implements Runnable, TextToSpeech.OnInitListener {
 
     private TextToSpeech tts;
 
-    private int voiceCountdown = 20;
+    private int voiceCountdown = VOICE_COUNTDOWN_DELAY;
 
     TimerRunnable(final MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -42,7 +47,7 @@ final class TimerRunnable implements Runnable, TextToSpeech.OnInitListener {
         if (voiceCountdown == 0 && mainActivity.notificationSwitch.isChecked()) {
             tts.speak(VOICE_COMMANDS[RANDOM.nextInt(VOICE_COMMANDS.length)],
                     TextToSpeech.QUEUE_ADD, null, "RANDOM");
-            voiceCountdown = 20;
+            voiceCountdown = VOICE_COUNTDOWN_DELAY;
         }
         voiceCountdown--;
     }

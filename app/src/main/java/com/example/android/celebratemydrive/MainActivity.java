@@ -47,17 +47,25 @@ public class MainActivity extends AppCompatActivity {
      * The target location threshold in meters.
      */
     private static final float TARGET_LOCATION_THRESHOLD = 50;
+
+    /**
+     * Permissions needed to be requested for Marshmallow
+     */
     private static final String[] INITIAL_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION
     };
+
     Switch notificationSwitch;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
     private Spinner locationSpinner;
     private ImageView button;
-    private boolean red = true;
+
     private ScheduledThreadPoolExecutor executor;
     private ScheduledFuture scheduledFuture;
+
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+
+    private boolean green = false;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -78,17 +86,11 @@ public class MainActivity extends AppCompatActivity {
         timerET.setFocusable(false);
         timerET.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getSupportFragmentManager(), "timePicker");
             }
         });
-//        tps = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-//            @Override
-//            public void onInit(int status) {
-//
-//            }
-//        });
         locationSpinner = (Spinner) findViewById(R.id.locationSpinner);
         notificationSwitch = (Switch) findViewById(R.id.voice_switch);
 
@@ -96,9 +98,9 @@ public class MainActivity extends AppCompatActivity {
         final MainActivity instance = this;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                button.setImageResource(red ? R.drawable.green_car : R.drawable.red_car);
-                if (!(red = !red)) {
+            public void onClick(final View view) {
+                button.setImageResource(green ? R.drawable.green_car : R.drawable.red_car);
+                if ((green = !green)) {
                     scheduledFuture = executor.scheduleAtFixedRate(new TimerRunnable(instance),
                             0, 1000, TimeUnit.MILLISECONDS);
                     if (locationSpinner.getSelectedItem() != null
