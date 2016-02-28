@@ -61,11 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ScheduledThreadPoolExecutor executor;
     private ScheduledFuture scheduledFuture;
-
     private LocationManager locationManager;
     private LocationListener locationListener;
 
-    private boolean green = false;
+    private boolean red = true;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         timerET.setFocusable(false);
         timerET.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View v) {
+            public void onClick(View v) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getSupportFragmentManager(), "timePicker");
             }
@@ -98,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
         final MainActivity instance = this;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View view) {
-                button.setImageResource(green ? R.drawable.green_car : R.drawable.red_car);
-                if ((green = !green)) {
+            public void onClick(View view) {
+                button.setImageResource(red ? R.drawable.green_car : R.drawable.red_car);
+                if (!(red = !red)) {
                     scheduledFuture = executor.scheduleAtFixedRate(new TimerRunnable(instance),
                             0, 1000, TimeUnit.MILLISECONDS);
                     if (locationSpinner.getSelectedItem() != null
