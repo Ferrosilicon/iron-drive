@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     MINIMUM_LOCATION_UPDATE_TIME, MINIMUM_LOCATION_UPDATE_DISTANCE,
                     locationListener);
         } catch (final SecurityException e) {
-            Log.e("MainActivity", "Permission fuck-up while activating");
+            Log.e("MainActivity", "Permission fuck-up while activating", e);
         }
     }
 
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             locationManager.removeUpdates(locationListener);
             locationListener = null;
         } catch (final SecurityException e) {
-            Log.e("MainActivity", "Permission fuck-up while deactivating");
+            Log.e("MainActivity", "Permission fuck-up while deactivating", e);
         }
     }
 
