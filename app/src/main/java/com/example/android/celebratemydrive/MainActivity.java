@@ -1,18 +1,16 @@
 package com.example.android.celebratemydrive;
 
-import android.app.AlarmManager;
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +20,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -30,6 +27,9 @@ import android.widget.Switch;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,14 +47,17 @@ public class MainActivity extends AppCompatActivity {
      * The target location threshold in meters.
      */
     private static final float TARGET_LOCATION_THRESHOLD = 50;
-
+    private static final String[] INITIAL_PERMS = {
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    Switch notificationSwitch;
     private LocationManager locationManager;
     private LocationListener locationListener;
-
     private Spinner locationSpinner;
     private ImageView button;
-
     private boolean red = true;
+    private ScheduledThreadPoolExecutor executor;
+    private ScheduledFuture scheduledFuture;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -66,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setTitle("Iron Drive");
             setSupportActionBar(toolbar);
         }
-
+        getPermission();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        executor = new ScheduledThreadPoolExecutor(1);
 
         EditText timerET = (EditText) findViewById(R.id.timer);
         timerET.setClickable(true);
@@ -86,55 +90,36 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         locationSpinner = (Spinner) findViewById(R.id.locationSpinner);
+        notificationSwitch = (Switch) findViewById(R.id.voice_switch);
 
         button = (ImageView) findViewById(R.id.button);
+        final MainActivity instance = this;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 button.setImageResource(red ? R.drawable.green_car : R.drawable.red_car);
-                final View voiceSwitch = findViewById(R.id.voice_switch);
                 if (!(red = !red)) {
-                    final Calendar c = Calendar.getInstance();
-                    final PendingIntent mAlarmSender =
-                            PendingIntent.getBroadcast(getApplicationContext(), 0,
-                            new Intent(getApplicationContext(), AlarmReceiver.class),
-                            PendingIntent.FLAG_ONE_SHOT);
-                    long firstTime = c.getTimeInMillis();
-                    final AlarmManager am =
-                            (AlarmManager) getApplicationContext()
-                                    .getSystemService(Context.ALARM_SERVICE);
-                    final SharedPreferences sharedPreferences = PreferenceManager
-                            .getDefaultSharedPreferences(getApplicationContext());
-                    final SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("voice", voiceSwitch.isEnabled());
-                    editor.apply();
-                    final Boolean bool = sharedPreferences.getBoolean("voice", true);
-                    final String s = bool.toString();
-                    Log.e("", s);
-
-                    if (locationSpinner.getSelectedItem() != null) {
+                    scheduledFuture = executor.scheduleAtFixedRate(new TimerRunnable(instance),
+                            0, 1000, TimeUnit.MILLISECONDS);
+                    if (locationSpinner.getSelectedItem() != null
+                            && locationSpinner.getSelectedItemId() > 0) {
+                        Log.i("LocationSpinner", locationSpinner.getSelectedItem().toString());
                         onTrackingStart(null); // TODO: get Location instance of spinner value
                     }
-                    am.set(AlarmManager.RTC_WAKEUP, firstTime, mAlarmSender);
                 } else {
-                    if (locationSpinner.getSelectedItem() != null)
+                    scheduledFuture.cancel(false);
+                    if (locationSpinner.getSelectedItem() != null
+                            && locationSpinner.getSelectedItemId() > 0)
                         onTrackingStop();
                 }
             }
         });
-        final Switch notificationSwitch = (Switch) findViewById(R.id.voice_switch);
-        notificationSwitch.setChecked(PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext()).getBoolean("voice", true));
-        notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences sharedPreferences = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("voice", isChecked);
-                editor.apply();
-            }
-        });
+    }
+
+    @TargetApi(23)
+    private void getPermission() {
+        if (Integer.parseInt(Build.VERSION.RELEASE.split("\\.")[0]) >= 6)
+            requestPermissions(INITIAL_PERMS, 1337);
     }
 
     /**
