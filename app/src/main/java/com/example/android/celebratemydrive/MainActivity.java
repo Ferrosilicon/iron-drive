@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private LocationListener locationListener;
 
     private Spinner locationSpinner;
-    private EditText timerET;
     private ImageView button;
 
     private boolean red = true;
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        timerET = (EditText) findViewById(R.id.timer);
+        EditText timerET = (EditText) findViewById(R.id.timer);
         timerET.setClickable(true);
         timerET.setFocusable(false);
         timerET.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Called when the start button is pressed and GPS tracking is enabled (not timer).
      */
-    void onTrackingStart(final Location targetLocation) {
+    private void onTrackingStart(final Location targetLocation) {
         try {
             locationListener = new ArriveLocationListener(this, targetLocation,
                     TARGET_LOCATION_THRESHOLD);

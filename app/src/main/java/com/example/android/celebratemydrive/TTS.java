@@ -9,7 +9,7 @@ import android.util.Log;
 import java.util.Locale;
 import java.util.Random;
 
-// TODO: deprecated
+// FIXME: deprecated
 final class TTS extends Service implements TextToSpeech.OnInitListener,
         TextToSpeech.OnUtteranceCompletedListener {
 
